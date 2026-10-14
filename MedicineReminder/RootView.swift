@@ -22,15 +22,28 @@ struct RootView: View {
     }
 }
 
+enum AppTab: Hashable {
+    case today
+    case add
+    case history
+}
+
 struct MainTabView: View {
+    @State private var selectedTab: AppTab = .today
+
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             TodayView()
                 .tabItem { Label("Today", systemImage: "clock") }
-            AddMedicineView()
+                .tag(AppTab.today)
+
+            AddMedicineView(selectedTab: $selectedTab)
                 .tabItem { Label("Add", systemImage: "plus.circle") }
+                .tag(AppTab.add)
+
             HistoryView()
                 .tabItem { Label("History", systemImage: "calendar") }
+                .tag(AppTab.history)
         }
         .tint(.teal)
     }
